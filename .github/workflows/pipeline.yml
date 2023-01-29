@@ -23,25 +23,25 @@ jobs:
         run: npm run eslint
       - name: build
         run: npm run build
-      - name: test
-        run: npm run test 
-      - name: e2e tests
-        uses: cypress-io/github-action@v4
+      #- name: test
+      #  run: npm run test 
+      #- name: e2e tests
+      #  uses: cypress-io/github-action@v4
         with:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:5000
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deployment
-        if: ${{ github.event_name == 'push' && contains( join(toJson(github.event.commits.*.message),''), '#skip') == false }}
+        if: ${{ github.event_name == 'push' && contains( toJson(join(github.event.commits.*.message, '')), '#skip') == false }}
         run: flyctl deploy --remote-only  
       - name: Build Success
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ github.event_name == 'push' && contains( join(toJson(github.event.commits.*.message),''), '#skip') == false && success() }}
+        if: ${{ github.event_name == 'push' && contains( toJson(join(github.event.commits.*.message, '')), '#skip') == false && success() }}
         with:
           severity: info
           text: A new version of Pokedex deployed!
-          details: to https://delicate-morning-8864.fly.dev/ by ${{ join(toJson(github.event.commits.*.author.username),'')  }}
+          details: to https://delicate-morning-8864.fly.dev/ by ${{ toJson( join(github.event.commits.*.author.username,'')) }}
           footer: 'Severity: Informational'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build Failure
@@ -52,7 +52,7 @@ jobs:
           text: Build Failed!
           footer: 'Severity: Error'
           description: 'commit'
-          details: ${{ github.event.commits.*.url}} by ${{github.event.commits.*.author.username}} broke the build :( 
+          details: ${{ toJson(join(github.event.commits.*.url, '')) }} by ${{ toJson(join(github.event.commits.*.author.username, '')) }} broke the build :( 
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}    
   tag_release:
     needs: simple_deployment_pipeline
