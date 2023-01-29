@@ -41,7 +41,7 @@ jobs:
         with:
           severity: info
           text: A new version of Pokedex deployed!
-          details: to https://delicate-morning-8864.fly.dev/ by ${{ toJson( join(github.event.commits.*.author.username,'')) }}
+          details: to https://delicate-morning-8864.fly.dev/ by ${{ toJson( join(github.event.commits.*.committer.username,'') ) }}
           footer: 'Severity: Informational'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build Failure
