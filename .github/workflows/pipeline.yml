@@ -41,7 +41,7 @@ jobs:
         with:
           severity: info
           text: A new version of Pokedex deployed!
-          details: to https://delicate-morning-8864.fly.dev/ by ${{ toJson( join(github.event.commits.*.committer.username,'') ) }}
+          details: to https://delicate-morning-8864.fly.dev/ 
           footer: 'Severity: Informational'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build Failure
@@ -62,7 +62,7 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' && contains( join(toJson(github.event.commits.*.message),''), '#skip') == false }}
+        if: ${{ github.event_name == 'push' && contains( join(toJson(github.event.commits.*.message), ''), '#skip') == false }}
         uses: anothrNick/github-tag-action@eca2b69f9e2c24be7decccd0f15fdb1ea5906598
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
