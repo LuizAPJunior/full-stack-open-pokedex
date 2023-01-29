@@ -23,14 +23,14 @@ jobs:
         run: npm run eslint
       - name: build
         run: npm run build
-      #- name: test
-      #  run: npm run test 
-      #- name: e2e tests
-      #  uses: cypress-io/github-action@v4
-      #  with:
-      #    command: npm run test:e2e
-      #    start: npm run start-prod
-      #    wait-on: http://localhost:5000
+      - name: test
+        run: npm run test 
+      - name: e2e tests
+        uses: cypress-io/github-action@v4
+        with:
+          command: npm run test:e2e
+          start: npm run start-prod
+          wait-on: http://localhost:5000
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deployment
         if: ${{ github.event_name == 'push' && contains( toJson(join(github.event.commits.*.message, '')), '#skip') == false }}
